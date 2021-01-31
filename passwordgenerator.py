@@ -4,7 +4,6 @@
 import random
 import string
 import datetime
-from cryptography.fernet import Fernet
 
 # Welcome message for user
 print("Welcome to Password Generator.")
@@ -42,20 +41,25 @@ password_length = pwlength()
 passwordList = []
 # Message to display password
 message = "This is your password: "
+
+
 # Error message if password_length is more than 32 characters
-error_message = f"Please choose a password between 8 and 32 characters!"
+def error_msg():
+    print(f"Please choose a password between 8 and 32 characters!")
+
+
 # Types of characters for password
 # String module used
 password_characters = string.hexdigits + "!@$"
 
-# For loop to append number of times in password_length
-# i.e. if password_length == 8 append 8 times
-for characters in range(password_length):
-    # Add characters randomly from password_characters variable
-    passwordList.append(random.choice(password_characters))
 
 # Function to generate the password and write to file
-def genpw():
+def genpw(password_length):
+    # For loop to append number of times in password_length
+    # i.e. if password_length == 8 append 8 times
+    for characters in range(password_length):
+        # Add characters randomly from password_characters variable
+        passwordList.append(random.choice(password_characters))
     # Converts password from a list to a string
     password = ''.join(passwordList)
     # Print message and password as string
@@ -70,13 +74,13 @@ def genpw():
 
 # Only print password if password_length is less than 32 characters
 if 8 <= password_length <= 32:
-    genpw()
+    genpw(password_length)
     # If password_length is more than 32 do not print password
     # Print error message instead
 else:
     # If password is not within range
     # Print error message
-    print(error_message)
-    # Re run the two functions
-    pwlength()
-    genpw()
+    error_msg()
+    # Re ask for new password
+    new_password_length = int(input("Enter password length: "))
+    genpw(new_password_length)

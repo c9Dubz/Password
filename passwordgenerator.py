@@ -3,11 +3,36 @@
 # Import modules
 import random
 import string
-import datetime
+from datetime import date
+import sqlite3
+
+def read_database(account:str):
+    """
+    Returns the password for the given account from the database.
+    """
+    conn = sqlite3.connect("passwords.db")
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS passwords(account text, password text, date text)")
+    c.execute("SELECT * FROM passwords WHERE account=:account", {"account":account})
+    result = c.fetchall()
+    conn.close()
+
+    if len(result) == 0:
+        return f"Found no password for {account} in the database."
+
+    data = f"Account: {result[0][0]} \nPassword: {result[0][1]} \nDate created: {result[0][2]}"
+    return data
 
 # Welcome message for user
 print("Welcome to Password Generator.")
 
+# asking the user for the task
+task = int(input("What to do?\n 1. Read password \n 2. Generate password \n"))
+if task == 1:
+    account = input("Which account's password do you want to know? ")
+    print(read_database(account))
+    quit()
+=======
 
 # Ask user for password
 def master_pw():
@@ -41,6 +66,19 @@ else:
 username = input("How should I call you? ")
 # Store the category/where the password is going to be used
 pwID = input("Where are you going to use this password? ")
+
+
+def add_to_database(account:str, password:str):
+    """
+    Stores passwords into the database.
+    """
+    conn = sqlite3.connect("passwords.db")
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS passwords(account text, password text, date text)")
+    c.execute("INSERT INTO passwords VALUES(:account, :password, :date)", {"account":account, "password":password, "date":date.today()})
+    conn.commit()
+    conn.close()
+    print(f"Password for {account} added successfully into the database.")
 
 
 # Function to prompt user to enter length of password
@@ -95,11 +133,8 @@ def gen_pw(password_length):
     # Print message and password as string
     print(message + "".join(password))
     # Create txt file to store password
-    with open('passwords.txt', 'a') as f:
-        f.write(f'{pwID.capitalize()}: {password}\n')
-        f.write(f'Password generated on {datetime.date.today()}.')
-        f.write('\n\n')
-        f.close()
+    # Adding the password to the database
+    add_to_database(pwID, password)
 
 
 # Only print password if password_length is less than 32 characters

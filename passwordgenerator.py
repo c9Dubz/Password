@@ -32,6 +32,35 @@ if task == 1:
     account = input("Which account's password do you want to know? ")
     print(read_database(account))
     quit()
+=======
+
+# Ask user for password
+def master_pw():
+    master_password = input("Please enter the password: ")
+    return master_password
+
+
+master_password = master_pw()
+
+# Number of chances user have to enter the right password
+chances = 3
+# The master password to access file
+pwd = 'hello'
+# Loop to check password
+# and tell user how many chances at guessing the pw user have left
+if master_password == pwd:
+    pass
+else:
+    while chances > 1:
+        print("Wrong password!")
+        chances -= 1
+        print(f"You have {chances} chance(s) left.")
+        new_master_password = input("Please enter the password: ")
+        if new_master_password == pwd:
+            break
+    else:
+        print("INTRUDER ALERT! CLOSE PROGRAM!")
+        exit()
 
 # Variable to store username
 username = input("How should I call you? ")
@@ -53,7 +82,7 @@ def add_to_database(account:str, password:str):
 
 
 # Function to prompt user to enter length of password
-def pwlength():
+def pw_length():
     while True:
         # Error handling
         # Try statement to ensure that user enters length in digits
@@ -62,7 +91,7 @@ def pwlength():
             password_length = int(input(f"Okay {username.capitalize()}, How many characters do you want in you "
                                         f"password? "
                                         f"\nEnter password length: "))
-        # If user enter password length in words e.g. Six or Ten
+        # If user enters password length in words e.g. Six or Ten
         except:
             print("Please enter number of characters in digits!")
             password_length = int(input("Enter password length: "))
@@ -74,7 +103,7 @@ def pwlength():
 
 
 # Store password length in a variable inside function
-password_length = pwlength()
+password_length = pw_length()
 
 # Empty list to store password
 passwordList = []
@@ -93,7 +122,7 @@ password_characters = string.hexdigits + "!@$"
 
 
 # Function to generate the password and write to file
-def genpw(password_length):
+def gen_pw(password_length):
     # For loop to append number of times in password_length
     # i.e. if password_length == 8 append 8 times
     for characters in range(password_length):
@@ -110,7 +139,7 @@ def genpw(password_length):
 
 # Only print password if password_length is less than 32 characters
 if 8 <= password_length <= 32:
-    genpw(password_length)
+    gen_pw(password_length)
     # If password_length is more than 32 do not print password
     # Print error message instead
 else:
@@ -119,4 +148,4 @@ else:
     error_msg()
     # Re ask for new password
     new_password_length = int(input("Enter password length: "))
-    genpw(new_password_length)
+    gen_pw(new_password_length)

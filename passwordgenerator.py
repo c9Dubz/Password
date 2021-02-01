@@ -27,7 +27,7 @@ def read_database(account:str):
 print("Welcome to Password Generator.")
 
 # asking the user for the task
-task = int(input("What to do?\n 1. Read password \n 2. Generate password \n"))
+task = int(input("What do you wish to do?\n 1. Read password \n 2. Generate password \n"))
 if task == 1:
     account = input("Which account's password do you want to know? ")
     print(read_database(account))
@@ -36,7 +36,7 @@ if task == 1:
 
 # Ask user for password
 def master_pw():
-    master_password = input("Please enter the password: ")
+    master_password = input("Please enter the master password: ")
     return master_password
 
 
@@ -78,7 +78,7 @@ def add_to_database(account:str, password:str):
     c.execute("INSERT INTO passwords VALUES(:account, :password, :date)", {"account":account, "password":password, "date":date.today()})
     conn.commit()
     conn.close()
-    print(f"Password for {account} added successfully into the database.")
+    print(f"Password for {account.captitalize()} added successfully into the database.")
 
 
 # Function to prompt user to enter length of password
